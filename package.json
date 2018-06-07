@@ -1,0 +1,29 @@
+{
+  "name": "caratjs",
+  "version": "1.0.0",
+  "description": "Vdom caratjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naveennagan/caratjs.git"
+  },
+  "keywords": [
+    "JS",
+    "VDOM"
+  ],
+  "author": "naveen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naveennagan/caratjs/issues"
+  },
+  "homepage": "https://github.com/naveennagan/caratjs#readme",
+  "dependencies": {
+    "path": "^0.12.7",
+    "webpack": "^4.11.1",
+    "webpack-bundle-analyzer": "^2.13.1"
+  }
+}
