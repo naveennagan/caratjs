@@ -1,10 +1,10 @@
 //include file caratjs
 var caratTestComponent = new Carat(
-  "<div onclick={changeName}> {name} </div>", {
+  "<div size = {size} onclick={changeName}> {name} </div>", {
     name: "Test Component ! ",
     size: 10,
     changeName: () => {
-      return "Changed Through click !";
+      return " Changed Through click !";
     }
   });
 

@@ -68,9 +68,11 @@ var Carat = function (view, fields) {
     }
 }
 
-Carat.prototype.mount = (component, dom) => {
+Carat.prototype.mount = (component, mount) => {
   //render component and mount it to dom.
-  var renderedComponent = render(component, div);
+  var renderedComponent = render(component, mount);
+  //add event listeners
+  watcher.addEventListener(component, mount);
 
   return renderedComponent;
 };
