@@ -10,7 +10,7 @@ module.exports = {
     agent_dashboard: path.join(__dirname, '/index.js')
   },
   output: {
-    path: path.resolve(__dirname, '/Build'),
+    path: path.join(__dirname, '/Build'),
     filename: 'carat_output.js',
     publicPath: '/',
   },

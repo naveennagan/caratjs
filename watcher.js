@@ -1,10 +1,10 @@
-import { vdom } from 'vdom';
+import { vdom } from './vdom';
 var events = ['click'];
 var watcher = {
   addEventListener: (component) => {
     events.map((eventName) => {
       document.addEventListener(eventName, (e) => {
-        component.render();
+        console.log("Re Render the component ! ");
       });
     });
   }
