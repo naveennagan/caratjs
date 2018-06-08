@@ -1,6 +1,6 @@
 import vdom from './vdom';
 import render from './render';
-//import { watcher } from './watcher';
+import watcher from './watcher';
 var parser = new DOMParser();
 var caratRegexExpression = /\{([0-9A-Za-z ]+)\}/g;
 var Carat = function (view, fields) {
@@ -51,17 +51,22 @@ var Carat = function (view, fields) {
       var fieldKeys = Object.keys(fields);
       var fieldString = "";
       fieldKeys.map((fieldKey) => {
-        fieldString += `var ${fieldKey}=${fields[fieldKey]};`;
+        typeof fields[fieldKey] != 'string' ? fieldString += `var ${fieldKey}=${fields[fieldKey]};` :
+          fieldString += `var ${fieldKey}='${fields[fieldKey]}';`;
       });
 
+      console.log("Field String ", fieldString);
+      console.log("Expression", expression);
       //declare all variables from fields and append it to expression;
-      var functionalExpression = `function(){
-         var value="";
-      ${fieldString}
-      value= ${expression} 
-      return value;
-    }`;
-      return "Interpolated Value";
+      var functionalExpression = 'var value="";'
+        + fieldString + 'value='
+        + expression
+        + '; return value;';
+      functionalExpression = functionalExpression.replace(/(\r\n\t|\n|\r\t)/gm, "");
+      console.log("Functional Expression ", functionalExpression);
+      var resultFunction = Function(functionalExpression);
+      console.log(" Real function ", resultFunction);
+      return resultFunction();
     },
     this.interpolate = (view, fields) => {
       return view.replace(caratRegexExpression,
@@ -89,7 +94,7 @@ Carat.mount = (component, mountelement) => {
   console.log("Rendered Component is ", renderedComponent);
   mountelement.innerHtml = renderedComponent;
   //add event listeners
-  // watcher(component, mount);
+  watcher(component, mountElement, Carat.mount);
 
   return renderedComponent;
 };
