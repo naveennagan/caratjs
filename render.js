@@ -1,4 +1,4 @@
-var clickEvents = ['onclick'];
+var clickEvents = { 'onclick': "click" };
 var render = function (vdom, mount) {
   if (vdom.type === "DIV") {
     //create element with
@@ -7,11 +7,12 @@ var render = function (vdom, mount) {
     //If functional attributes , parse them and change the context.
     for (var i = 0; i < attributes.length; i++) {
       var attribute = attributes.item(i);
-      if (clickEvents.indexOf(attribute["nodeName"]) != -1) {
+      if (clickEvents[attribute["nodeName"]]) {
         var attributeValue = attribute["nodeValue"];
-        var attributeFunction = Function(attributeValue);
-        attributeFunction = attributeFunction.bind(vdom);
-        velem.setAttribute(attribute["nodeName"], attributeFunction);
+        var attributeFunction = Function("return " + attributeValue);
+        console.log("Attribute function ", attributeFunction());
+        var clickFunctionAttribute = attributeFunction().bind(vdom.getContext());
+        velem.addEventListener(clickEvents[attribute["nodeName"]], clickFunctionAttribute);
       }
       else {
         velem.setAttribute(attribute["nodeName"], attribute["nodeValue"]);

@@ -5,12 +5,13 @@ function vdom() {
     return vdomTypes.indexOf(type) != -1 ? type : "NONE"
   },
     this.vdom = {
-      init: (type, content, children, parent, props) => {
+      init: (type, content, children, parent, props, context) => {
         this.vdom.type = this.isTypeValid(type);
         this.vdom.content = content || "";
         this.vdom.children = children || [];
         this.vdom.parent = parent || {};
         this.vdom.props = props || {};
+        context ? this.context = context : "";
       },
       getHash: () => {
         let keys = Object.keys(this.vdom.props);
@@ -23,11 +24,15 @@ function vdom() {
       getChildren: () => {
         return this.vdom.children;
       },
+      getContext: () => {
+        return vdom.context;
+      },
       type: "NONE",
       children: [],
       content: "",
       parent: {},
-      props: {}
+      props: {},
+      context: {}
     };
   return this.vdom;
 }
