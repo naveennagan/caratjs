@@ -8,7 +8,7 @@ var render = function (vdom, mount) {
     vdom.children.map((child) => {
       render(child, velem)
     });
-    mount.appendChild(velem);
+    mount && mount != null && mount.appendChild ? mount.appendChild(velem) : "";
     return mount;
   }
   else {

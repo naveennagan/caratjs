@@ -17,8 +17,13 @@ var Carat = function (view, fields) {
     //step 1 --- interpolate view part with properties
     var interpolatedTemplate = this.interpolate(this.view, this.fields);
 
+    console.log("Interpolated Template ", interpolatedTemplate);
     //step 2 --- created html doc    
-    var htmlDoc = parser.parseFromString(interpolatedTemplate, "text/html");
+    var htmlBody = parser.parseFromString(interpolatedTemplate, "text/html");
+
+    var htmlDoc = htmlBody.body.childNodes[0];
+
+    console.log("HTML Parsed ", htmlDoc);
 
     //step 3 --- create vdom
     var vdom = this.createVdomFromDOM(htmlDoc, {});
@@ -33,6 +38,7 @@ var Carat = function (view, fields) {
       var dom = new vdom();
       var children = [];
       var htmlDOMchildNodes = htmlDOM.childNodes;
+      console.log("Child nodes ", htmlDOMchildNodes);
       for (var i = 0; i < htmlDOMchildNodes.length; i++) {
         var childNode = this.createVdomFromDOM(htmlDOMchildNodes[i], dom);
         children.push(childNode);
@@ -54,24 +60,34 @@ var Carat = function (view, fields) {
       ${fieldString}
       value= ${expression} 
       return value;
-      }`;
+    }`;
+      return "Interpolated Value";
     },
     this.interpolate = (view, fields) => {
-      while (view.match(caratRegexExpression)) {
-        text.replace(regex,
-          (m) => {
-            var expression = m.slice(1, -1);
-            var value = this.evaluateExpression(expression, fields);
-            return value;
-          });
-      }
+      return view.replace(caratRegexExpression,
+        (m) => {
+          var expression = m.slice(1, -1);
+          var value = this.evaluateExpression(expression, fields);
+          return "'" + value + "'";
+        });
+      // while (view.match(caratRegexExpression)) {
+      //   view.replace(caratRegexExpression,
+      //     (m) => {
+      //       var expression = m.slice(1, -1);
+      //       var value = this.evaluateExpression(expression, fields);
+      //       return value;
+      //     });
+      // }
     }
 }
 
-Carat.mount = (component, mount) => {
+Carat.mount = (component, mountelement) => {
   //render component and mount it to dom.
-  console.log("Render function ", render);
-  var renderedComponent = render(component, mount);
+  var vdom = component.getVDom();
+  console.log("Created VDOM ", vdom);
+  var renderedComponent = render(vdom, mountElement);
+  console.log("Rendered Component is ", renderedComponent);
+  mountelement.innerHtml = renderedComponent;
   //add event listeners
   // watcher(component, mount);
 
