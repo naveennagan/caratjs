@@ -4,7 +4,8 @@ var caratTestComponent = new Carat(
     name: "Test Component ! ",
     size: 10,
     changeName: () => {
-      return " Changed Through click !";
+      console.log("This context " + this);
+      this.name = " Changed Through click at !" + new Date();
     }
   });
 

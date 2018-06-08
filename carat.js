@@ -11,6 +11,7 @@ var Carat = function (view, fields) {
   }
   this.view = view;
   this.fields = fields;
+  //bind all fields with context this
 
   this.getVDom = () => {
     //parse view part and create vdom objects
@@ -23,7 +24,7 @@ var Carat = function (view, fields) {
 
     var htmlDoc = htmlBody.body.childNodes[0];
 
-    console.log("HTML Parsed ", htmlDoc);
+    //console.log("HTML Parsed ", htmlDoc);
 
     //step 3 --- create vdom
     var vdom = this.createVdomFromDOM(htmlDoc, {});
@@ -36,14 +37,14 @@ var Carat = function (view, fields) {
         return {};
       }
       var dom = new vdom();
+      var htmlAttrs = htmlDOM.attributes;
       var children = [];
       var htmlDOMchildNodes = htmlDOM.childNodes;
-      console.log("Child nodes ", htmlDOMchildNodes);
+      //console.log("Child nodes ", htmlDOMchildNodes);
       for (var i = 0; i < htmlDOMchildNodes.length; i++) {
         var childNode = this.createVdomFromDOM(htmlDOMchildNodes[i], dom);
         children.push(childNode);
       }
-      var htmlAttrs = htmlDOM.attributes;
       dom.init("DIV", htmlDOM.nodeValue, children, parent, htmlAttrs);
       return dom;
     },
@@ -55,17 +56,17 @@ var Carat = function (view, fields) {
           fieldString += `var ${fieldKey}='${fields[fieldKey]}';`;
       });
 
-      console.log("Field String ", fieldString);
-      console.log("Expression", expression);
+      //console.log("Field String ", fieldString);
+      //console.log("Expression", expression);
       //declare all variables from fields and append it to expression;
       var functionalExpression = 'var value="";'
         + fieldString + 'value='
         + expression
         + '; return value;';
       functionalExpression = functionalExpression.replace(/(\r\n\t|\n|\r\t)/gm, "");
-      console.log("Functional Expression ", functionalExpression);
+      //console.log("Functional Expression ", functionalExpression);
       var resultFunction = Function(functionalExpression);
-      console.log(" Real function ", resultFunction);
+      //console.log(" Real function ", resultFunction);
       return resultFunction();
     },
     this.interpolate = (view, fields) => {
@@ -75,27 +76,24 @@ var Carat = function (view, fields) {
           var value = this.evaluateExpression(expression, fields);
           return "'" + value + "'";
         });
-      // while (view.match(caratRegexExpression)) {
-      //   view.replace(caratRegexExpression,
-      //     (m) => {
-      //       var expression = m.slice(1, -1);
-      //       var value = this.evaluateExpression(expression, fields);
-      //       return value;
-      //     });
-      // }
     }
 }
 
 Carat.mount = (component, mountelement) => {
   //render component and mount it to dom.
+  //remove all child components 
+  mountelement.innerHtml = "";
+  while (mountelement.firstChild) {
+    mountelement.removeChild(mountelement.firstChild);
+  }
+  //remove listeners
   var vdom = component.getVDom();
-  console.log("Created VDOM ", vdom);
+  //console.log("Created VDOM ", vdom);
   var renderedComponent = render(vdom, mountElement);
   console.log("Rendered Component is ", renderedComponent);
   mountelement.innerHtml = renderedComponent;
-  //add event listeners
-  watcher(component, mountElement, Carat.mount);
-
+  // add event listeners
+  watcher(renderedComponent, component, mountElement, Carat.mount);
   return renderedComponent;
 };
 
