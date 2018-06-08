@@ -16,4 +16,4 @@ var render = function (vdom, mount) {
   }
 }
 
-exports.render = render;
+export default render;

@@ -1,6 +1,6 @@
-import { vdom } from './vdom';
-import { render } from './render';
-import { watcher } from './watcher';
+import vdom from './vdom';
+import render from './render';
+//import { watcher } from './watcher';
 var parser = new DOMParser();
 var caratRegexExpression = /\{([0-9A-Za-z ]+)\}/g;
 var Carat = function (view, fields) {
@@ -68,13 +68,14 @@ var Carat = function (view, fields) {
     }
 }
 
-Carat.prototype.mount = (component, mount) => {
+Carat.mount = (component, mount) => {
   //render component and mount it to dom.
+  console.log("Render function ", render);
   var renderedComponent = render(component, mount);
   //add event listeners
-  watcher.addEventListener(component, mount);
+  // watcher(component, mount);
 
   return renderedComponent;
 };
 
-module.exports = Carat;
+export default Carat;

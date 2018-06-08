@@ -31,5 +31,5 @@ var patcher = function (vdom, realdom) {
   return updates;
 }
 
-exports.patcher = patcher;
+export default patcher;
 

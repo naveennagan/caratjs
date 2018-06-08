@@ -31,4 +31,5 @@ function vdom() {
     };
   return this.vdom;
 }
-exports.vdom = vdom;
+
+export default vdom;

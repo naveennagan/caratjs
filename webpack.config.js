@@ -9,6 +9,14 @@ module.exports = {
   entry: {
     agent_dashboard: path.join(__dirname, '/index.js')
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
+      }
+    ]
+  },
   output: {
     path: path.join(__dirname, '/Build'),
     filename: 'carat_output.js',
